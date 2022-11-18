@@ -7,7 +7,7 @@ const image = require('../images/Correo.jpg')
 const logo = require('../images/Logo.jpg')
 const ver = require('../images/ver.png')
 
-
+HOLA
 export default ({navigation}) =>
 {
     const [usuarioo, setUsuario] = useState("");
