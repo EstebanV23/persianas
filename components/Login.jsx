@@ -1,7 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ImageBackground, Dimensions, Image, TouchableOpacity, ActivityIndicator } from "react-native";
-import Navegation from '../stacks/Navegation';
 
 
 const image = require('../images/Correo.jpg')
