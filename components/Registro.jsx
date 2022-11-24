@@ -88,7 +88,6 @@ const app = ({navigation})=>
                             placeholder="Nombre Completo"
                             style={styles.inputText}
                             defaultValue={defecto}
-                            defaultValue={defecto}
                         />
                         {listoVerificar? verificacionNom ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>El campo no puede quedar vacio</Text>:<></>}
                     </View>
@@ -96,7 +95,7 @@ const app = ({navigation})=>
                     <View>
                         <TextInput
                             onChangeText={setUsuario}
-                            placeholder="Nombre Completo"
+                            placeholder="Usuario"
                             style={styles.inputText}
                             defaultValue={defecto}
                         />
