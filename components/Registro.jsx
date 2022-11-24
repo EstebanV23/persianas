@@ -6,6 +6,7 @@ import { FontAwesome, AntDesign } from '@expo/vector-icons';
 
 const app = ({navigation})=>
 {
+    
     /* Imagen de fondo */
     const image = require('../images/Correo.jpg');
     
@@ -20,7 +21,24 @@ const app = ({navigation})=>
     const[verificacionPas, setVerificacionPas] = useState(false);//Verificacion para que la contraseña no esté vacía
     const[verificacionIgu, setVerificacionIgu] = useState(false);//Verificacion para que sean iguales
     const[data, setData] = useState();//
+    const[defecto, setDefecto] = useState('');
 
+    
+    const agregarUsuario = () =>
+    {
+        console.log(data);
+        fetch('http://localhost:5000/api/usuario/add',{
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        }).then(response => console.log(response))
+        setDefecto('');
+        Alert.alert("Se ha creado exitosamente tu cuenta")
+        navigation.navigate('Login')
+    }
+    
     const verificacion = ()=>
     {
         const patronPassword = /\w{8,}/ //Comprueba que la contrasña tenga como mínimo 8 caracteres y que sean alfanumericos
@@ -29,22 +47,18 @@ const app = ({navigation})=>
         setVerificacionUsu(usuario.length > 0);//comprobamos la cantidad de caracteres sea mayor a 0
         setVerificacionPas(patronPassword.test(password));//Verificacion de la contraseña cumpla con el patron
         setVerificacionIgu(password === passwordVerifica);//Verificacion para que las dos contraseñas sean iguales
+        
+        /* Agregamos los datos a un objeto para enviarlo a la base de datos  */
         setData({
             "usuario": usuario,
             "password": password,
             "nombre": nombre,
-            "correo": null
+            "correo": "sin correo"
         })
         
-        if(verificacionNom && verificacionPas && verificacionIgu && verificacionUsu){
-            console.log(data);
-            fetch('http://localhost:5000/api/usuario/add',{
-                method: 'POST',
-                headers: {
-                    'Content-type': 'application/json'
-                },
-                body: data
-            }).then(response => console.log(response))
+        if(verificacionNom && verificacionPas && verificacionIgu && verificacionUsu)
+        {
+            agregarUsuario();
         }
     }
     
@@ -63,7 +77,7 @@ const app = ({navigation})=>
                 <View style={styles.contenedorInputs}>
                     <Text style={styles.titulo}>Registro</Text>
                     {/* Boton de volver al logeado */}
-                    <TouchableOpacity onPress={()=> navigation.navigate("Login")}>
+                    <TouchableOpacity onPress={()=> navigation.navigate("Login")} style={styles.botonTexto}>
                         <Text style={styles.texto}>Ya estás registrado? Inicia sesión aquí</Text>
                     </TouchableOpacity>
                     {/* Espacios para los input */}
@@ -73,6 +87,8 @@ const app = ({navigation})=>
                             onChangeText={setNombre}
                             placeholder="Nombre Completo"
                             style={styles.inputText}
+                            defaultValue={defecto}
+                            defaultValue={defecto}
                         />
                         {listoVerificar? verificacionNom ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>El campo no puede quedar vacio</Text>:<></>}
                     </View>
@@ -82,6 +98,7 @@ const app = ({navigation})=>
                             onChangeText={setUsuario}
                             placeholder="Nombre Completo"
                             style={styles.inputText}
+                            defaultValue={defecto}
                         />
                         {listoVerificar? verificacionUsu ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>El campo no puede quedar vacio</Text>:<></>}
                     </View>
@@ -98,6 +115,7 @@ const app = ({navigation})=>
                             onChangeText={setPassword}
                             placeholder="Contraseña"
                             style={styles.inputText}
+                            defaultValue={defecto}
                         />
                         {listoVerificar? verificacionPas ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>Debe tener mínimo 8 caracteres</Text>:<></>}
                     </View>
@@ -114,6 +132,7 @@ const app = ({navigation})=>
                             onChangeText={setPasswordVerifica}
                             placeholder="Confirmar contraseña"
                             style={styles.inputText}
+                            defaultValue={defecto}
                         />
                         {listoVerificar? (verificacionIgu && verificacionPas) ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>Deben ser iguales</Text>:<></>}
                     </View>
@@ -130,6 +149,10 @@ const styles = StyleSheet.create({
     image:{
         height: Dimensions.get('window').height,
         width: Dimensions.get('window').width
+    },
+    botonTexto:{
+        height: 0,
+        marginBottom: 70
     },
     boton: {
         backgroundColor: '#18253b',
@@ -159,7 +182,6 @@ const styles = StyleSheet.create({
     },
     texto:{
         fontWeight: '600',
-        marginBottom: 70
     },
     botonVolver:{
         width: 0
