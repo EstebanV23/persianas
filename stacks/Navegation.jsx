@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import Login from '../components/Login';
+import Registro from '../components/Registro';
 import PantallaPrincipal from '../components/PantallaPrincipal';
 
 const Stack = createNativeStackNavigator();
@@ -12,9 +13,13 @@ const Navegation = () =>
         <NavigationContainer>
             <Stack.Navigator>
                 <Stack.Screen
-                    name = 'Pantalla Principal'
-                    component={PantallaPrincipal}
+                    name = 'Registro'
+                    component={Registro}
                 />
+                    <Stack.Screen
+                        name = 'Pantalla Principal'
+                        component={PantallaPrincipal}
+                    />
                 <Stack.Screen
                     name = 'Login'
                     component={Login}
