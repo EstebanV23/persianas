@@ -34,8 +34,12 @@ const app = ({navigation})=>
             },
             body: JSON.stringify(data)
         }).then(response => console.log(response))
-        setDefecto('');
-        Alert.alert("Se ha creado exitosamente tu cuenta")
+        /* Reseteo los valores */
+        setNombre('');
+        setUsuario('');
+        setPassword('');
+        setPasswordVerifica('');
+        setListoVerificar(false);
         navigation.navigate('Login')
     }
     
@@ -87,7 +91,7 @@ const app = ({navigation})=>
                             onChangeText={setNombre}
                             placeholder="Nombre Completo"
                             style={styles.inputText}
-                            defaultValue={defecto}
+                            value={nombre}
                         />
                         {listoVerificar? verificacionNom ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>El campo no puede quedar vacio</Text>:<></>}
                     </View>
@@ -97,7 +101,7 @@ const app = ({navigation})=>
                             onChangeText={setUsuario}
                             placeholder="Usuario"
                             style={styles.inputText}
-                            defaultValue={defecto}
+                            value={usuario}
                         />
                         {listoVerificar? verificacionUsu ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>El campo no puede quedar vacio</Text>:<></>}
                     </View>
@@ -114,7 +118,7 @@ const app = ({navigation})=>
                             onChangeText={setPassword}
                             placeholder="Contraseña"
                             style={styles.inputText}
-                            defaultValue={defecto}
+                            value={password}
                         />
                         {listoVerificar? verificacionPas ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>Debe tener mínimo 8 caracteres</Text>:<></>}
                     </View>
@@ -131,7 +135,7 @@ const app = ({navigation})=>
                             onChangeText={setPasswordVerifica}
                             placeholder="Confirmar contraseña"
                             style={styles.inputText}
-                            defaultValue={defecto}
+                            value={passwordVerifica}
                         />
                         {listoVerificar? (verificacionIgu && verificacionPas) ? <Text style={{color:'green'}}>Campo Correcto!</Text> : <Text style={{color:'red'}}>Deben ser iguales</Text>:<></>}
                     </View>
