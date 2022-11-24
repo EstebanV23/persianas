@@ -13,20 +13,11 @@ export default ({navigation}) =>
     const [usuarioo, setUsuario] = useState("");
     const [passwordd, setPassword] = useState("");
     const [visibilidad, setVisibilidad] = useState(true);
-    const [data, setData] = useState([{
-            usuario: "Brayan",
-            password: "Brayan23"
-        },
-        {
-            usuario: "Jorge",
-            password: "Jorge12"
-        }
-    ]);
-    const [cargando, setCargando] = useState(false);
-    const [cargado, setCargado] = useState(false);
+    const [data, setData] = useState();
+    const [cargando, setCargando] = useState(true);
 
 
-    /* useEffect(() =>{
+    useEffect(() =>{
         const url = "http://localhost:5000/api/usuarios";
         fetch(url)
         .then((response)=>{
@@ -37,17 +28,7 @@ export default ({navigation}) =>
             setData(data);
             setCargando(false);
         })
-    },[]); */
-    /* data([
-        {
-            usuario: "Brayan",
-            password: "Brayan23"
-        },
-        {
-            usuario: "Jorge",
-            password: "Jorge12"
-        }
-    ]); */
+    },[]);
 
     if(cargando){
         return(
@@ -68,6 +49,8 @@ export default ({navigation}) =>
         }
         
     }
+
+    
 
     if(!cargando)
     {
