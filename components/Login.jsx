@@ -3,16 +3,19 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TextInput, ImageBackground, Dimensions, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import {FontAwesome} from '@expo/vector-icons';
+import { useFonts } from "expo-font";
 
 /* Traemos las imagenes que necesitamos utilizar */
 const image = require('../images/Correo.jpg')
 const logo = require('../images/Logo.jpg')
-const ver = require('../images/ver.png')
 
 /* Funcion principal donde devuelve la vista */
 export default ({ navigation }) => {
-  const [usuarioPro, setUsuarioPro] = useState(""); //usuario provicional, que se obtiene del input
-  const [passwordPro, setPasswordPro] = useState("");//password provicional, que se obtiene del input
+  const [fontsLoaded] = useFonts({
+    'popin': require('../assets/fonts/Poppins-SemiBold.ttf'),
+  });
+  const [usuarioPro, setUsuarioPro] = useState("usuario"); //usuario provicional, que se obtiene del input
+  const [passwordPro, setPasswordPro] = useState("12345678");//password provicional, que se obtiene del input
   const [visibilidad, setVisibilidad] = useState(true);//Esta visivilidad se utiliza para cambiar el modo de contraseña oculta o a la vista
   const [data, setData] = useState();//Aqui es donde guardamos los datos de la base de datos Mongo
   const [cargando, setCargando] = useState(true);//Este useState se utiliza para saber el estado de la carga de datos recibidas por el servidor
@@ -43,8 +46,8 @@ export default ({ navigation }) => {
   const Loguearse = () => {
     for (const element of data) {
       console.log(element)
-      const { usuario, password } = element;
-      if (usuario === usuarioPro && password === passwordPro) navigation.navigate('Pantalla Principal')
+      const { _id, usuario, password } = element;
+      if (usuario === usuarioPro && password === passwordPro) navigation.navigate('Update', {id:_id, logueado: true})
     }
 
   }
@@ -68,7 +71,7 @@ export default ({ navigation }) => {
             <View style={styles.contenedorInputs}>
               {/* Text input para el obtener el usuario provisional */}
               <TextInput
-                style={styles.inputText}
+                style={[styles.inputText, styles.letra]}
                 onChangeText={setUsuarioPro}
                 value={usuarioPro}
                 placeholder='Usuario'
@@ -78,7 +81,7 @@ export default ({ navigation }) => {
               <TextInput
                 secureTextEntry={visibilidad}
                 textContentType='newPassword'
-                style={styles.inputText}
+                style={[styles.inputText, styles.letra]}
                 onChangeText={setPasswordPro}
                 value={passwordPro}
                 placeholder='Contraseña'
@@ -91,12 +94,12 @@ export default ({ navigation }) => {
                 {visibilidad ? <FontAwesome name="eye-slash" size={19}/> : <FontAwesome name="eye" size={19}/>}
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Loguearse()}>
-                <Text style={styles.boton}>Iniciar Sesion</Text>
+                <Text style={[styles.boton, styles.letra]}>Iniciar Sesion</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.contenedorTextos}>
-              <TouchableOpacity><Text style={styles.texto}>Olvidó su contraseña?</Text></TouchableOpacity>
-              <TouchableOpacity onPress={() => navigation.navigate('Registro')}><Text style={styles.texto}>Registrarse</Text></TouchableOpacity>
+              <TouchableOpacity><Text style={[styles.texto, styles.letra]}>Olvidó su contraseña?</Text></TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate('Registro')}><Text style={[styles.texto, styles.letra]}>Registrarse</Text></TouchableOpacity>
             </View>
           </View>
         </ImageBackground>
@@ -112,6 +115,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#23421cd',
     height: Dimensions.get('window').height,
   },
+  letra:{
+    fontFamily: 'popin'
+  },  
   botone:{
     width: 0
   },
