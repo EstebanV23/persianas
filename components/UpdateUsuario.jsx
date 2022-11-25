@@ -16,7 +16,7 @@ export default ({navigation, route}) =>
     const [nuevoNombre, setNuevoNombre] = useState("")//Creamos un useState para guardar el valor traido de la base de datos y mostrarlo como una información anterior
     const [nuevoCorreo, setNuevoCorreo] = useState("")//useState para tomar el valor del curso y si desea actualizarlo
     const [nuevaDireccion, setNuevaDireccion] = useState("");//useState para tomar el valor del curso y si desea actualizarlo
-
+    const [nuevaData, setNuevaData] = useState();//]
     
     /* En el useEffect se mete laa petición fetch */
     console.log(logueado)
@@ -30,6 +30,10 @@ export default ({navigation, route}) =>
             }).then((data) => {
                 console.log(data);//Visualizamos los datos por consola
                 setDatos(data);//Enviamos los datos ya renderizados al useState creado
+                setNuevoUsuario(data.usuario)
+                setNuevoNombre(data.nombre)
+                setNuevoCorreo(data.correo || "")
+                setNuevaDireccion(data.direccion || "")
                 setCargando(false)
             })
             .catch(e => console.log("Error: " + e.message));
@@ -50,12 +54,6 @@ export default ({navigation, route}) =>
         );
     }
     
-    console.log(datos)
-    setNuevoCorreo(datos.nombre)
-    console.log(nuevaDireccion)
-    console.log(nuevoCorreo)
-    console.log(nuevoUsuario)
-    console.log(nuevoNombre)
     if(!logueado)
     {
         return (
@@ -67,6 +65,32 @@ export default ({navigation, route}) =>
             </View>
         )
     }
+
+    const actualizar = async() =>
+    {
+        setNuevaData({
+            nombre: nuevoNombre,
+            usuario: nuevoUsuario,
+            correo: nuevoCorreo,
+            direccion: nuevaDireccion
+        })
+        await fetch(`http://localhost:5000/api/usuario/update/${id}`,{
+            method: "PUT",
+            headers:{
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(nuevaData)
+        })
+        .then(response =>
+        {
+            return response.json()
+        })
+        .then(data=>{
+            console.log(data)
+        })
+        navigation.navigate("Update", {id: id, logueado: true})
+    }
+
     return (
         <View>
             <View styles={[styles.contenedorNombre]}>
@@ -82,11 +106,26 @@ export default ({navigation, route}) =>
                         placeholder="Nombre"
                     />
                     <TextInput
-                        onChangeText={setNuevoNombre}
-                        value={nuevoNombre}
+                        onChangeText={setNuevoUsuario}
+                        value={nuevoUsuario}
                         style={[styles.letra, styles.input]}
                         placeholder="Usuario"
                     />
+                    <TextInput
+                        onChangeText={setNuevoCorreo}
+                        value={nuevoCorreo}
+                        style={[styles.letra, styles.input]}
+                        placeholder="Correo"
+                    />
+                    <TextInput
+                        onChangeText={setNuevaDireccion}
+                        value={nuevaDireccion}
+                        style={[styles.letra, styles.input]}
+                        placeholder="Direccion"
+                    />
+                    <TouchableOpacity onPress={actualizar}>
+                        <Text>Actualizar datos</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>
