@@ -1,3 +1,4 @@
+
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
@@ -33,5 +34,4 @@ const Navegation = () =>
         </NavigationContainer>
     );
 }
-
-export default Navegation
+export default Navegation;
