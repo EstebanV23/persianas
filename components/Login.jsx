@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
   visualizar: {
     border: 'none',
     position: 'absolute',
-    bottom: 112,
+    top: 78,
     right: 20,
   },
   ojo:{
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     paddingLeft: 17,
     paddingRight: 17,
     paddingBottom: 9,
-    marginBottom: 40,
+    marginBottom: 20,
     fontWeight: 'bold',
     color: 'white',
     textAlign: 'center',

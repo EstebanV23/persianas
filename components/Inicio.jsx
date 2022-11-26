@@ -126,7 +126,7 @@ export default ({ navigation, route }) => {
             </View>
             <TouchableOpacity onPress={() => {
                       setAbrirModal(false);
-                      logueado ? navigation.navigate("Location", {id, logueado}) :
+                      logueado ? navigation.navigate("Update", {id, logueado}) :
                       navigation.navigate("Login")
                     }}>
               <View style={styles.accion}>

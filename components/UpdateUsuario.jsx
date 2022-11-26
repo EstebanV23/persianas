@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions, TextInput } from "react-native";
+import { FontAwesome, Entypo, MaterialIcons, Ionicons, FontAwesome5 } from "@expo/vector-icons"
 import { useFonts } from "expo-font";
 
 export default ({navigation, route}) =>
@@ -9,7 +10,7 @@ export default ({navigation, route}) =>
         'popin': require('../assets/fonts/Poppins-SemiBold.ttf'),
     });
     console.log(route.params)
-    const { id, logueado } = route.params || {id: '0', logueado: false};
+    const { id, logueado } = route.params || {id: '63824b1f09d53692f8f7ee68', logueado: true};
     const [datos, setDatos] = useState();//Aqui es donde guardamos los datos de la base de datos Mongo
     const [cargando, setCargando] = useState(true);//Este useState se utiliza para saber el estado de la carga de datos recibidas por el servidor
     const [nuevoUsuario, setNuevoUsuario] = useState("")//Creamos un useState para guardar el valor traido de la base de datos y mostrarlo como una información anterior
@@ -94,38 +95,65 @@ export default ({navigation, route}) =>
 
     return (
         <View>
+            <View style={styles.nav}>
+                <TouchableOpacity onPress={() => navigation.navigate("Inicio", {id: id, logueado: true})}>
+                    <Entypo name="back" size={30} color="white" />
+                </TouchableOpacity>
+
+                <Text style={[styles.letter, styles.letra]}>Vico's</Text>
+                <View style={styles.posicion}>
+                    <TouchableOpacity>
+                        <FontAwesome5 name="search" size={22} color="white" />
+                    </TouchableOpacity>
+                    <TouchableOpacity>
+                        <FontAwesome5 name="shopping-cart" size={22} color="white" />
+                    </TouchableOpacity>
+                </View>
+            </View>
             <View styles={[styles.contenedorNombre]}>
                 <Text style={[styles.letra, styles.subTitle]}>  BIENVENIDO</Text>
                 <Text style={[styles.letra, styles.title]}>{datos.usuario.toUpperCase()}</Text>
             </View>
             <View style={styles.contenedorInformacion}>
                 <View styles={styles.contenedorInputs}>
-                    <TextInput
-                        onChangeText={setNuevoNombre}
-                        value={nuevoNombre}
-                        style={[styles.letra, styles.input]}
-                        placeholder="Nombre"
-                    />
-                    <TextInput
-                        onChangeText={setNuevoUsuario}
-                        value={nuevoUsuario}
-                        style={[styles.letra, styles.input]}
-                        placeholder="Usuario"
-                    />
-                    <TextInput
-                        onChangeText={setNuevoCorreo}
-                        value={nuevoCorreo}
-                        style={[styles.letra, styles.input]}
-                        placeholder="Correo"
-                    />
-                    <TextInput
-                        onChangeText={setNuevaDireccion}
-                        value={nuevaDireccion}
-                        style={[styles.letra, styles.input]}
-                        placeholder="Direccion"
-                    />
+                    <View style={styles.contenedorInput}>
+                        <Text style={styles.letra}>Nombre:</Text>
+                        <TextInput
+                            onChangeText={setNuevoNombre}
+                            value={nuevoNombre}
+                            style={[styles.letra, styles.input]}
+                        />
+                        <Entypo name="user" size={24} color="black" style={styles.iconoInput}/>
+                    </View>
+                    <View style={styles.contenedorInput}>
+                        <Text style={styles.letra}>Usuario:</Text>
+                        <TextInput
+                            onChangeText={setNuevoUsuario}
+                            value={nuevoUsuario}
+                            style={[styles.letra, styles.input]}
+                        />
+                        <FontAwesome name="user" size={24} color="black" style={styles.iconoInput}/>
+                    </View>
+                    <View style={styles.contenedorInput}>
+                        <Text style={styles.letra}>Correo:</Text>
+                        <TextInput
+                            onChangeText={setNuevoCorreo}
+                            value={nuevoCorreo}
+                            style={[styles.letra, styles.input]}
+                        />
+                        <MaterialIcons name="email" size={24} color="black" style={styles.iconoInput}/>
+                    </View>
+                    <View style={styles.contenedorInput}>
+                        <Text style={styles.letra}>Direccion:</Text>
+                        <TextInput
+                            onChangeText={setNuevaDireccion}
+                            value={nuevaDireccion}
+                            style={[styles.letra, styles.input]}
+                        />
+                        <Ionicons name="location-sharp" size={24} color="black" style={styles.iconoInput}/>
+                    </View>
                     <TouchableOpacity onPress={actualizar}>
-                        <Text>Actualizar datos</Text>
+                        <Text style={styles.boton}>Actualizar datos</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -138,23 +166,46 @@ const styles = StyleSheet.create({
     input: {
         backgroundColor: '#dddcdc',
         paddingTop: 14,
-        paddingLeft: 22,
+        paddingLeft: 38,
         paddingRight: 22,
         paddingBottom: 14,
         fontSize: 13,
-        marginTop: 20,
+        marginBottom: 20,
         color: '#18253b',
         borderRadius: 16,
     },
-    contenedorInformacion:{
-        backgroundColor: 'aqua'
+    nav: {
+        paddingTop: 42,
+        flexDirection: "row",
+        gap: 20,
+        justifyContent: "space-around",
+        alignItems: "center",
+        backgroundColor: "#131e2f",
+        paddingBottom: 15,
     },
-    contenedorInputs:{
-        flexDirection: 'row',
-        alignItems: 'center',
+    posicion: {
+        flexDirection: "row",
+        gap: 15,
+    },
+
+    letter: {
+        color: "white",
+        fontFamily: "popins",
+        fontSize: 25,
+    },
+    iconoInput:{
+        position: 'absolute',
+        bottom: 33,
+        left: 10,
+    },
+    contenedorInformacion:{
+        padding: 30,
     },
     contenedorNombre:{
         marginTop: 40,
+    },
+    contenedorInputs:{
+        padding: 80,
     },
     subTitle:{
         fontSize: 20,

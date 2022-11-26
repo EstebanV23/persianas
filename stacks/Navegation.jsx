@@ -15,8 +15,11 @@ const Navegation = () =>
     return (
         <NavigationContainer>
             <Stack.Navigator>
-                
-            <Stack.Screen
+                <Stack.Screen
+                    name = 'Update'
+                    component={UpdateUsuario}
+                />
+                <Stack.Screen
                     name = 'Categorias'
                     component={Categorias}
                 />
@@ -24,10 +27,6 @@ const Navegation = () =>
                 <Stack.Screen
                     name = 'Inicio'
                     component={Inicio}
-                />
-                <Stack.Screen
-                    name = 'Update'
-                    component={UpdateUsuario}
                 />
                 <Stack.Screen
                     name = 'Login'
