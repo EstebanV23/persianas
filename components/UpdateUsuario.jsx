@@ -9,20 +9,20 @@ export default ({navigation, route}) =>
         'popin': require('../assets/fonts/Poppins-SemiBold.ttf'),
     });
     console.log(route.params)
-    const { id, logueado } = route.params || {id: '63778ef65e7e92d81d3bf29a', logueado: true};
+    const { id, logueado } = route.params || {id: '0', logueado: false};
     const [datos, setDatos] = useState();//Aqui es donde guardamos los datos de la base de datos Mongo
     const [cargando, setCargando] = useState(true);//Este useState se utiliza para saber el estado de la carga de datos recibidas por el servidor
     const [nuevoUsuario, setNuevoUsuario] = useState("")//Creamos un useState para guardar el valor traido de la base de datos y mostrarlo como una información anterior
     const [nuevoNombre, setNuevoNombre] = useState("")//Creamos un useState para guardar el valor traido de la base de datos y mostrarlo como una información anterior
     const [nuevoCorreo, setNuevoCorreo] = useState("")//useState para tomar el valor del curso y si desea actualizarlo
     const [nuevaDireccion, setNuevaDireccion] = useState("");//useState para tomar el valor del curso y si desea actualizarlo
-    const [nuevaData, setNuevaData] = useState();//]
+    const [nuevaData, setNuevaData] = useState({});//]
     
-    /* En el useEffect se mete laa petición fetch */
+    /* En el useEffect se mete la petición fetch */
     console.log(logueado)
-    useEffect(() => {
+    /* useEffect(() => {
         if (logueado) {
-            const url = `http://localhost:5000/api/usuario/${id}`; //Url del servidor
+            let url = `http://localhost:5000/api/usuario/${id}`; //Url del servidor
 
             fetch(url)
             .then((response) => {
@@ -42,7 +42,29 @@ export default ({navigation, route}) =>
         setTimeout(() => {
             setCargando(false)
         }, 2000);
-    }, [logueado])
+    }, [logueado]) */
+
+    if (logueado) {
+        let url = `http://localhost:5000/api/usuario/${id}`; //Url del servidor
+
+        fetch(url)
+        .then(async(response) => {
+            return response.json();//Respuesta con un JSON
+        }).then(async data => {
+            console.log(data);//Visualizamos los datos por consola
+            setDatos(data);//Enviamos los datos ya renderizados al useState creado
+            setNuevoUsuario(data.usuario)
+            setNuevoNombre(data.nombre)
+            setNuevoCorreo(data.correo || "")
+            setNuevaDireccion(data.direccion || "")
+            setCargando(false)
+        })
+        .catch(e => console.log("Error: " + e.message));
+    }
+    else 
+    setTimeout(() => {
+        setCargando(false)
+    }, 2000);
     
     
     /* Aquí validamos si la cargas se está haciendo, ya que cambia cuando el fetch se completa */
