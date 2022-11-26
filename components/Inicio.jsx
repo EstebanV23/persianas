@@ -35,7 +35,7 @@ export default ({ navigation, route }) => {
   const [producto, setProducto] = useState([]);
   const [usuario, setUsuario] = useState({});
   const [cargando, setCargando] = useState(true);
-  const [abrirModal, setAbrirModal] = useState(true);
+  const [abrirModal, setAbrirModal] = useState(false);
   
   useEffect( () =>
   {
@@ -126,8 +126,7 @@ export default ({ navigation, route }) => {
             </View>
             <TouchableOpacity onPress={() => {
                       setAbrirModal(false);
-                      logueado ? navigation.navigate("Update", {id, logueado}) :
-                      navigation.navigate("Login")
+                      navigation.navigate("Categorias")
                     }}>
               <View style={styles.accion}>
                 <Ionicons name="ios-location-sharp" size={35} color="black" style={styles.iconoAccion}/>
@@ -137,14 +136,15 @@ export default ({ navigation, route }) => {
                 </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=> {
+                setAbrirModal(false)
+                navigation.navigate('Categorias')
+              }}>
               <View style={styles.accion}>
                 <MaterialIcons name="category" size={31} color="black" style={styles.iconoAccion}/>
                 <View style={styles.accionContenido}>
-                  <TouchableOpacity onPress={()=>navigation.navigate('Categorias')}>
                   <Text style={[styles.letter2, styles.accionTextoPrimario]}>Listar por categorias</Text>
                   <Text style={[styles.letter3, styles.accionTextoSecundario]}>Aquí puedes ver los productos por categoría</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             </TouchableOpacity>

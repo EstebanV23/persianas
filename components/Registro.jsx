@@ -5,7 +5,7 @@ import { useFonts } from "expo-font";
 
 
 
-const app = ({navigation})=>
+const App = ({navigation})=>
 {
     const [fontsLoaded] = useFonts({
         'popin': require('../assets/fonts/Poppins-SemiBold.ttf'),
@@ -267,4 +267,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default app
+export default App
