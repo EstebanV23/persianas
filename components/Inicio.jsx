@@ -34,7 +34,6 @@ export default ({ navigation, route }) => {
   const {id, logueado} = route.params || defecto;
   const [producto, setProducto] = useState([]);
   const [usuario, setUsuario] = useState({});
-  const [primeraVez, setPrimeraVez] = useState(0);
   const [cargando, setCargando] = useState(true);
   const [abrirModal, setAbrirModal] = useState(true);
   
@@ -48,7 +47,7 @@ export default ({ navigation, route }) => {
       })
     .catch(e => console.log("Error: " +e ))
 
-    /* if(logueado)
+    if(logueado)
     {
       fetch(`http://localhost:5000/api/usuario/${id}`)
       .then(res => {return res.json()})
@@ -62,27 +61,10 @@ export default ({ navigation, route }) => {
       setTimeout(() => {
         setCargando(false);
       }, 1000);
-    } */
+    }
 
-  }, [])
+  }, [logueado])
   
-
-  if(logueado && primeraVez === 0)
-  {
-    fetch(`http://localhost:5000/api/usuario/${id}`)
-    .then(res => {return res.json()})
-    .then(data => 
-      {
-        setUsuario(data);
-        setCargando(false);
-      })
-    .catch(e => console.log("Error: " +e ))
-    setPrimeraVez(1)
-  }else{
-    setTimeout(() => {
-      setCargando(false);
-    }, 2000);
-  }
 
   const [fontsloaded] = useFonts({
     popins: require("../assets/fonts/Poppins-BoldItalic.ttf"),
@@ -169,8 +151,8 @@ export default ({ navigation, route }) => {
               <TouchableOpacity onPress={()=>{
                 setAbrirModal(false);
                 setUsuario({});
-                setPrimeraVez(0);
-                navigation.navigate("Login")
+                console.log(usuario)
+                navigation.navigate("Inicio", {id: 0, logueado: false})
               }}>
                 <View style={styles.accion}>
                   <Entypo name="log-out" size={31} color="black" style={styles.iconoAccion}/>
