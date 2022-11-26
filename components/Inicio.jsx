@@ -126,7 +126,7 @@ export default ({ navigation, route }) => {
             </View>
             <TouchableOpacity onPress={() => {
                       setAbrirModal(false);
-                      navigation.navigate("Categorias")
+                      logueado ? navigation.navigate("Update", {id: id, logueado: logueado}) : navigation.navigate("Login")
                     }}>
               <View style={styles.accion}>
                 <Ionicons name="ios-location-sharp" size={35} color="black" style={styles.iconoAccion}/>

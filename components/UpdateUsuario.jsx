@@ -10,7 +10,7 @@ export default ({navigation, route}) =>
         'popin': require('../assets/fonts/Poppins-SemiBold.ttf'),
     });
     console.log(route.params)
-    const { id, logueado } = route.params || {id: '63824b1f09d53692f8f7ee68', logueado: true};
+    const { id, logueado } = route.params || {id: '0', logueado: false};
     const [datos, setDatos] = useState();//Aqui es donde guardamos los datos de la base de datos Mongo
     const [cargando, setCargando] = useState(true);//Este useState se utiliza para saber el estado de la carga de datos recibidas por el servidor
     const [nuevoUsuario, setNuevoUsuario] = useState("")//Creamos un useState para guardar el valor traido de la base de datos y mostrarlo como una información anterior
