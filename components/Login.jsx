@@ -14,8 +14,8 @@ export default ({ navigation }) => {
   const [fontsLoaded] = useFonts({
     'popin': require('../assets/fonts/Poppins-SemiBold.ttf'),
   });
-  const [usuarioPro, setUsuarioPro] = useState("usuario"); //usuario provicional, que se obtiene del input
-  const [passwordPro, setPasswordPro] = useState("12345678");//password provicional, que se obtiene del input
+  const [usuarioPro, setUsuarioPro] = useState(""); //usuario provicional, que se obtiene del input
+  const [passwordPro, setPasswordPro] = useState("");//password provicional, que se obtiene del input
   const [visibilidad, setVisibilidad] = useState(true);//Esta visivilidad se utiliza para cambiar el modo de contraseña oculta o a la vista
   const [data, setData] = useState();//Aqui es donde guardamos los datos de la base de datos Mongo
   const [cargando, setCargando] = useState(true);//Este useState se utiliza para saber el estado de la carga de datos recibidas por el servidor
@@ -95,6 +95,9 @@ export default ({ navigation }) => {
               </TouchableOpacity>
               <TouchableOpacity onPress={() => Loguearse()}>
                 <Text style={[styles.boton, styles.letra]}>Iniciar Sesion</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => navigation.navigate("Inicio", {id: 0, logueado: false})}>
+                <Text style={[styles.boton, styles.letra]}>Cancelar</Text>
               </TouchableOpacity>
             </View>
             <View style={styles.contenedorTextos}>
