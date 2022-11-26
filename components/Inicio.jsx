@@ -21,48 +21,47 @@ import {
   Ionicons,
   Feather,
   FontAwesome,
+  MaterialIcons,
+  Entypo
 } from "@expo/vector-icons";
 
-const producto = [
+
+export default ({ navigation, route }) => {
+  const defecto = {
+    id: "0",
+    logueado: false
+  }
+  const {id, logueado} = route.params || defecto;
+  const [producto, setProducto] = useState([]);
+  const [usuario, setUsuario] = useState({});
+  const [cargando, setCargando] = useState(true);
+  const [abrirModal, setAbrirModal] = useState(true);
+  useEffect( () =>
   {
-    nombre: "Persiana Sheer Elegance Linen ",
-    descripcion:
-      "Su uso no sólo se limita a dormitorios, también puedes utilizarla en espacios comunes como sala, star, comedor y estudio. El color neutro de esta persiana te permitirá combinarla fácilmente con cualquier mueble y tono de pared. Incluye un tubo enrollable con un sistema de deslizamiento que permite subir y bajar las telas, según tu necesidad y así escoger cuánta luz ingresará al espacio donde se encuentre instalada. Los componentes de fabricación hacen que sea un producto durable y resistente. Además, solo necesitarás un paño húmedo para limpiarla. Se puede instalar tanto en muros como en techo. ",
+    fetch("http://localhost:5000/api/producto/all")
+    .then(res => {return res.json()})
+    .then(data => 
+      {
+        console.log(data);
+        setProducto(data);
+        setCargando(false)
+      })
+    .catch(e => console.log("Error: " +e ))
 
-    precio: "$164.900 Und",
-    imageurl: "https://persianasardila.com/media/uploads/sheer_1608173295.jpeg",
+    if(logueado)
+    {
+      fetch(`http://localhost:5000/api/usuario/${id}`)
+      .then(res => {return res.json()})
+      .then(data => 
+        {
+          console.log(data);
+          setProducto(data);
+          setCargando(false)
+        })
+      .catch(e => console.log("Error: " +e ))
+    }
 
-    color1: "orange",
-    color2: "black",
-    color3: "aqua",
-  },
-
-  {
-    nombre: "Persiana Sheer Elegance Linen ",
-    descripcion:
-      "Su uso no sólo se limita a dormitorios, también puedes utilizarla en espacios comunes como sala, star, comedor y estudio. El color neutro de esta persiana te permitirá combinarla fácilmente con cualquier mueble y tono de pared. Incluye un tubo enrollable con un sistema de deslizamiento que permite subir y bajar las telas, según tu necesidad y así escoger cuánta luz ingresará al espacio donde se encuentre instalada. Los componentes de fabricación hacen que sea un producto durable y resistente. Además, solo necesitarás un paño húmedo para limpiarla. Se puede instalar tanto en muros como en techo. ",
-
-    precio: "$164.900 Und",
-    imageurl: "https://persianasardila.com/media/uploads/sheer_1608173295.jpeg",
-    color1: "orange",
-    color2: "black",
-    color3: "aqua",
-  },
-
-  {
-    nombre: "Persiana Sheer Elegance Linen ",
-    descripcion:
-      "Su uso no sólo se limita a dormitorios, también puedes utilizarla en espacios comunes como sala, star, comedor y estudio. El color neutro de esta persiana te permitirá combinarla fácilmente con cualquier mueble y tono de pared. Incluye un tubo enrollable con un sistema de deslizamiento que permite subir y bajar las telas, según tu necesidad y así escoger cuánta luz ingresará al espacio donde se encuentre instalada. Los componentes de fabricación hacen que sea un producto durable y resistente. Además, solo necesitarás un paño húmedo para limpiarla. Se puede instalar tanto en muros como en techo. ",
-
-    precio: "$164.900 Und",
-    imageurl: "https://persianasardila.com/media/uploads/sheer_1608173295.jpeg",
-    color1: "orange",
-    color2: "black",
-    color3: "aqua",
-  },
-];
-
-export default ({ navigation }) => {
+  }, [])
   const [fontsloaded] = useFonts({
     popins: require("../assets/fonts/Poppins-BoldItalic.ttf"),
     popinstitle: require("../assets/fonts/Poppins-Bold.ttf"),
@@ -72,7 +71,7 @@ export default ({ navigation }) => {
   return (
     <View style={styles.principal}>
       <View style={styles.nav}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => setAbrirModal(true)}>
           <Ionicons name="ios-menu" size={30} color="white" />
         </TouchableOpacity>
 
@@ -86,32 +85,95 @@ export default ({ navigation }) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView>
-        <FlatList
-          data={producto}
-          renderItem={({ item }) => (
-            <View style={styles.card}>
-              <Image style={styles.image} source={{ uri: item.imageurl }} />
-              <View style={styles.card2}>
-                <Text style={styles.letter2}>{item.nombre}</Text>
-                <View style={styles.paletacors}>
-                  <View style={styles.colorr}>
-                    <FontAwesome name="circle" size={20} color={item.color1} />
-                    <FontAwesome name="circle" size={20} color={item.color2} />
-                    <FontAwesome name="circle" size={20} color={item.color3} />
-                  </View>
-                  <View style={styles.precioicon}>
-                    <Text style={styles.letter3}>{item.precio}</Text>
-                    <TouchableOpacity>
-                    <Feather name="plus-square" size={30} color="#131e2f" />
-                    </TouchableOpacity>
+      <Modal
+        visible={abrirModal}
+        animationType="slide"
+        onRequestClose={() => {
+          setAbrirModal(!abrirModal);
+        }}
+      >
+        <View style={styles.contenedorModal}>
+          <View style={styles.contenedorSalida}>
+            <TouchableOpacity onPress={()=> setAbrirModal(false)}>
+              <MaterialIcons name="close" size={32} style={styles.iconoCerrar} color="black" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.contenedorAcciones}>
+            <View style={styles.informacionUsuario}>
+              <FontAwesome name="user-circle-o" size={35} color="black" style={styles.iconoAccion}/>
+              <View style={styles.accionContenido}>
+                  <TouchableOpacity onPress={() => {
+                      setAbrirModal(false);
+                      navigation.navigate("Update", {id, logueado})
+                    }}>
+                    <Text style={[styles.letter2, styles.accionTextoPrimario]}>Nombre</Text>
+                    <Text style={[styles.letter3, styles.accionTextoSecundario]}>Editar perfil <Ionicons name="ios-arrow-forward-circle" size={11} color="black" /></Text>
+                  </TouchableOpacity>
+                </View>
+            </View>
+            <TouchableOpacity>
+              <View style={styles.accion}>
+                <Ionicons name="ios-location-sharp" size={35} color="black" style={styles.iconoAccion}/>
+                <View style={styles.accionContenido}>
+                  <Text style={[styles.letter2, styles.accionTextoPrimario]}>Direccción</Text>
+                  <Text style={[styles.letter3, styles.accionTextoSecundario]}>Aquí puedes ver tu direccion asociada</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.accion}>
+                <MaterialIcons name="category" size={31} color="black" style={styles.iconoAccion}/>
+                <View style={styles.accionContenido}>
+                  <Text style={[styles.letter2, styles.accionTextoPrimario]}>Listar por categorias</Text>
+                  <Text style={[styles.letter3, styles.accionTextoSecundario]}>Aquí puedes ver los productos por categoría</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.accion}>
+                <Entypo name="log-out" size={31} color="black" style={styles.iconoAccion}/>
+                <View style={styles.accionContenido}>
+                  <Text style={[styles.letter2, styles.accionTextoPrimario]}>Salir de la cuenta</Text>
+                  <Text style={[styles.letter3, styles.accionTextoSecundario]}>Puedes cerrar tu sesión</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {cargando
+        ?<View style={styles.horizontal}>
+          <ActivityIndicator size="small" color="#0000ff" />
+        </View>
+        :<ScrollView>
+          <Text style ={[styles.letter, styles.textoPrincipal]}>Nuestros productos</Text>
+          <FlatList
+            data={producto}
+            renderItem={({ item }) => (
+              <View style={styles.card}>
+                <Image style={styles.image} source={{ uri: item.imageurl }} />
+                <View style={styles.card2}>
+                  <Text style={styles.letter2}>{item.nombre}</Text>
+                  <View style={styles.paletacors}>
+                    <View style={styles.colorr}>
+                      <FontAwesome name="circle" size={20} color={item.color1} />
+                      <FontAwesome name="circle" size={20} color={item.color2} />
+                      <FontAwesome name="circle" size={20} color={item.color3} />
+                    </View>
+                    <View style={styles.precioicon}>
+                      <Text style={styles.letter3}>{item.precio}</Text>
+                      <TouchableOpacity>
+                        <Feather name="plus-square" size={30} color="#131e2f" />
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-          )}
-        />
-      </ScrollView>
+            )}
+          />
+        </ScrollView>
+      }
     </View>
   );
 };
@@ -122,7 +184,59 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
+  informacionUsuario: {
+    alignItems: "center",
+    flexDirection: "row",
+    margin: "auto",
+    marginTop: 40,
+    marginBottom: 40
+  },
+  iconoAccion:{
+    marginRight: 10
+  },
+  accionTextoPrimario: {
+    fontSize: 22,
+    color: "black"
+  },
+  accionTextoSecundario: {
+    fontSize: 10
+  },
+  accion:{
+    flexDirection: "row",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
 
+    elevation: 5,
+    padding: 20,
+    alignItems: "center",
+    marginBottom: 20
+  },
+  contenedorSalida: {
+    borderBottomColor: "black",
+  },
+  contenedorModal:{
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    padding: 22,
+    paddingTop: 40
+  },
+  textoPrincipal:{
+    fontSize: 31,
+    textAlign: "center",
+    color: "black",
+    marginTop: 20,
+  },
+  horizontal: {
+    alignItems: "center",
+    padding: 10,
+    justifyContent: "center",
+    height: Dimensions.get('window').height
+  },
   nav: {
     paddingTop: 42,
     flexDirection: "row",
@@ -157,8 +271,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     alignItems: "center",
     width: Dimensions.get("window").width - 50,
-    margin: 20,
-
+    margin: 'auto',
     borderRadius: 13,
     shadowColor: "#171717",
     shadowOffset: { width: -2, height: 4 },
@@ -187,7 +300,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   colorr: {
-  
+
     flexDirection: "row",
     gap: 5,
   },

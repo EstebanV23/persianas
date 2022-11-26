@@ -47,7 +47,7 @@ export default ({ navigation }) => {
     for (const element of data) {
       console.log(element)
       const { _id, usuario, password } = element;
-      if (usuario === usuarioPro && password === passwordPro) navigation.navigate('Update', {id:_id, logueado: true})
+      if (usuario === usuarioPro && password === passwordPro) navigation.navigate('Inicio', {id:_id, logueado: true})
     }
 
   }

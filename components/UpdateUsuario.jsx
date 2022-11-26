@@ -20,7 +20,7 @@ export default ({navigation, route}) =>
     
     /* En el useEffect se mete la petición fetch */
     console.log(logueado)
-    /* useEffect(() => {
+    useEffect(() => {
         if (logueado) {
             let url = `http://localhost:5000/api/usuario/${id}`; //Url del servidor
 
@@ -42,29 +42,8 @@ export default ({navigation, route}) =>
         setTimeout(() => {
             setCargando(false)
         }, 2000);
-    }, [logueado]) */
+    }, [logueado])
 
-    if (logueado) {
-        let url = `http://localhost:5000/api/usuario/${id}`; //Url del servidor
-
-        fetch(url)
-        .then(async(response) => {
-            return response.json();//Respuesta con un JSON
-        }).then(async data => {
-            console.log(data);//Visualizamos los datos por consola
-            setDatos(data);//Enviamos los datos ya renderizados al useState creado
-            setNuevoUsuario(data.usuario)
-            setNuevoNombre(data.nombre)
-            setNuevoCorreo(data.correo || "")
-            setNuevaDireccion(data.direccion || "")
-            setCargando(false)
-        })
-        .catch(e => console.log("Error: " + e.message));
-    }
-    else 
-    setTimeout(() => {
-        setCargando(false)
-    }, 2000);
     
     
     /* Aquí validamos si la cargas se está haciendo, ya que cambia cuando el fetch se completa */
