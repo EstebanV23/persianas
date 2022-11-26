@@ -34,39 +34,69 @@ export default ({ navigation, route }) => {
   const {id, logueado} = route.params || defecto;
   const [producto, setProducto] = useState([]);
   const [usuario, setUsuario] = useState({});
+  const [primeraVez, setPrimeraVez] = useState(0);
   const [cargando, setCargando] = useState(true);
   const [abrirModal, setAbrirModal] = useState(true);
+  
   useEffect( () =>
   {
     fetch("http://localhost:5000/api/producto/all")
     .then(res => {return res.json()})
     .then(data => 
       {
-        console.log(data);
         setProducto(data);
-        setCargando(false)
       })
     .catch(e => console.log("Error: " +e ))
 
-    if(logueado)
+    /* if(logueado)
     {
       fetch(`http://localhost:5000/api/usuario/${id}`)
       .then(res => {return res.json()})
       .then(data => 
         {
-          console.log(data);
-          setProducto(data);
-          setCargando(false)
+          setUsuario(data);
+          setCargando(false);
         })
       .catch(e => console.log("Error: " +e ))
-    }
+    }else{
+      setTimeout(() => {
+        setCargando(false);
+      }, 1000);
+    } */
 
   }, [])
+  
+
+  if(logueado && primeraVez === 0)
+  {
+    fetch(`http://localhost:5000/api/usuario/${id}`)
+    .then(res => {return res.json()})
+    .then(data => 
+      {
+        setUsuario(data);
+        setCargando(false);
+      })
+    .catch(e => console.log("Error: " +e ))
+    setPrimeraVez(1)
+  }else{
+    setTimeout(() => {
+      setCargando(false);
+    }, 2000);
+  }
+
   const [fontsloaded] = useFonts({
     popins: require("../assets/fonts/Poppins-BoldItalic.ttf"),
     popinstitle: require("../assets/fonts/Poppins-Bold.ttf"),
     popinsprice: require("../assets/fonts/Poppins-SemiBold.ttf"),
   });
+
+  if (cargando) {
+    return (
+      <View style={styles.horizontal}>
+        <ActivityIndicator size="small" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.principal}>
@@ -104,14 +134,19 @@ export default ({ navigation, route }) => {
               <View style={styles.accionContenido}>
                   <TouchableOpacity onPress={() => {
                       setAbrirModal(false);
-                      navigation.navigate("Update", {id, logueado})
+                      logueado ? navigation.navigate("Update", {id, logueado}) :
+                      navigation.navigate("Login")
                     }}>
-                    <Text style={[styles.letter2, styles.accionTextoPrimario]}>Nombre</Text>
+                    <Text style={[styles.letter2, styles.accionTextoPrimario]}>{usuario.usuario || "Registrate"}</Text>
                     <Text style={[styles.letter3, styles.accionTextoSecundario]}>Editar perfil <Ionicons name="ios-arrow-forward-circle" size={11} color="black" /></Text>
                   </TouchableOpacity>
                 </View>
             </View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => {
+                      setAbrirModal(false);
+                      logueado ? navigation.navigate("Location", {id, logueado}) :
+                      navigation.navigate("Login")
+                    }}>
               <View style={styles.accion}>
                 <Ionicons name="ios-location-sharp" size={35} color="black" style={styles.iconoAccion}/>
                 <View style={styles.accionContenido}>
@@ -129,15 +164,24 @@ export default ({ navigation, route }) => {
                 </View>
               </View>
             </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.accion}>
-                <Entypo name="log-out" size={31} color="black" style={styles.iconoAccion}/>
-                <View style={styles.accionContenido}>
-                  <Text style={[styles.letter2, styles.accionTextoPrimario]}>Salir de la cuenta</Text>
-                  <Text style={[styles.letter3, styles.accionTextoSecundario]}>Puedes cerrar tu sesión</Text>
+            {logueado
+              ?
+              <TouchableOpacity onPress={()=>{
+                setAbrirModal(false);
+                setUsuario({});
+                setPrimeraVez(0);
+                navigation.navigate("Login")
+              }}>
+                <View style={styles.accion}>
+                  <Entypo name="log-out" size={31} color="black" style={styles.iconoAccion}/>
+                  <View style={styles.accionContenido}>
+                    <Text style={[styles.letter2, styles.accionTextoPrimario]}>Salir de la cuenta</Text>
+                    <Text style={[styles.letter3, styles.accionTextoSecundario]}>Puedes cerrar tu sesión</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+              : <></>
+            }
           </View>
         </View>
       </Modal>
