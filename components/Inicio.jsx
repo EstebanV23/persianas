@@ -141,8 +141,10 @@ export default ({ navigation, route }) => {
               <View style={styles.accion}>
                 <MaterialIcons name="category" size={31} color="black" style={styles.iconoAccion}/>
                 <View style={styles.accionContenido}>
+                  <TouchableOpacity onPress={()=>navigation.navigate('Categorias')}>
                   <Text style={[styles.letter2, styles.accionTextoPrimario]}>Listar por categorias</Text>
                   <Text style={[styles.letter3, styles.accionTextoSecundario]}>Aquí puedes ver los productos por categoría</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </TouchableOpacity>

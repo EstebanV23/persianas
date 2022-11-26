@@ -6,6 +6,7 @@ import Login from '../components/Login';
 import Registro from '../components/Registro';
 import UpdateUsuario from '../components/UpdateUsuario';
 import Inicio from '../components/Inicio';
+import Categorias from '../components/Categorias';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,6 +15,12 @@ const Navegation = () =>
     return (
         <NavigationContainer>
             <Stack.Navigator>
+                
+            <Stack.Screen
+                    name = 'Categorias'
+                    component={Categorias}
+                />
+
                 <Stack.Screen
                     name = 'Inicio'
                     component={Inicio}
