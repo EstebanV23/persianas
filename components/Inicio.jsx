@@ -5,8 +5,6 @@ import {
   Text,
   View,
   Modal,
-  TextInput,
-  ImageBackground,
   Dimensions,
   Image,
   TouchableOpacity,
